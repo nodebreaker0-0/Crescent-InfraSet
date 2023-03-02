@@ -118,7 +118,7 @@ init_node(){
     sed -i "s/persistent_peers = \".*\"/persistent_peers = \"66f26fe655c624986d23af5f1c4f5b462220787f@13.124.45.5:26656\"/" $HOME/.crescent/config/config.toml
     
     echo "Setting State Sync"
-    SNAP_RPC="http://13.124.45.5:26657"
+    SNAP_RPC="http://13.124.45.5:16657"
     LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
     BLOCK_HEIGHT=$((LATEST_HEIGHT - 2000)); \
     TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
