@@ -129,7 +129,7 @@ init_node(){
     s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/.crescent/config/config.toml
     echo
 
-    cli=$(crescentd tendermint show-node-id --home $HOME/.crescent 2>&1 | jq -r '.')
+    cli=$(crescentd tendermint show-node-id --home $HOME/.crescent)
     echo "Please make sure to inform the partner channel of the ID. With your external IP $cli"
 }
 
