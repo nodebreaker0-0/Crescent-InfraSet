@@ -115,7 +115,7 @@ init_node(){
     #PEERS="$(get_peers)"
     #PEERS_LIST=66f26fe655c624986d23af5f1c4f5b462220787f@13.124.45.5:26656,
     #PEERS_LIST+=PEERS
-    sed -i "s/persistent_peers = \".*\"/persistent_peers = \"66f26fe655c624986d23af5f1c4f5b462220787f@13.124.45.5:26656\"/" $HOME/.crescent/config/config.toml
+    sed -i "s/persistent_peers = \".*\"/persistent_peers = \"66f26fe655c624986d23af5f1c4f5b462220787f@13.124.45.5:26656,61199f8618163eab3835eb684f382e3185ae9a89@13.124.45.5:16656\"/" $HOME/.crescent/config/config.toml
     
     echo "Setting State Sync"
     SNAP_RPC="http://13.124.45.5:16657"
