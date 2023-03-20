@@ -103,7 +103,7 @@ init_node(){
     # run init if genesis file does not exist
     if [ ! -f "${HOME}/.crescent/config/genesis.json" ]; then
         echo "Initializing node"
-        ${BINARY} init "mm-node" --chain-id="mooncat-2-internal" 2>&1 | sed -e 's/{.*}//' 
+        ${BINARY} init "mm-node" --chain-id "mooncat-2-internal" 
     
 
         # download genesis file
