@@ -103,34 +103,32 @@ init_node(){
     # run init if genesis file does not exist
     if [ ! -f "${HOME}/.crescent/config/genesis.json" ]; then
         echo "Initializing node"
-        ${BINARY} init "mm-node" --chain-id "mooncat-2-internal" 2>&1 | sed -e 's/{.*}//' 
-    fi
+        ${BINARY} init "mm-node" --chain-id "mooncat-2-internal" | sed -e 's/{.*}//' 
     
-    # download genesis file
-    echo "Downloading genesis file"
-    curl -sSL "https://blocksnapshot.s3.ap-northeast-2.amazonaws.com/mooncat-2-internal.json" -o "${HOME}/.crescent/config/genesis.json"
 
-    # get peers list
-    echo "Getting peer list"
-    #PEERS="$(get_peers)"
-    #PEERS_LIST=66f26fe655c624986d23af5f1c4f5b462220787f@13.124.45.5:26656,
-    #PEERS_LIST+=PEERS
-    sed -i "s/persistent_peers = \".*\"/persistent_peers = \"66f26fe655c624986d23af5f1c4f5b462220787f@13.124.45.5:26656,61199f8618163eab3835eb684f382e3185ae9a89@13.124.45.5:16656\"/" $HOME/.crescent/config/config.toml
-    
-    echo "Setting State Sync"
-    SNAP_RPC="http://13.124.45.5:16657"
-    LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
-    BLOCK_HEIGHT=$((LATEST_HEIGHT - 2000)); \
-    TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
+        # download genesis file
+        echo "Downloading genesis file"
+        curl -sSL "https://blocksnapshot.s3.ap-northeast-2.amazonaws.com/mooncat-2-internal.json" -o "${HOME}/.crescent/config/genesis.json"
 
-    sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
-    s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
-    s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
-    s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/.crescent/config/config.toml
-    echo
+        # get peers list
+        echo "Getting peer list"
+        sed -i "s/persistent_peers = \".*\"/persistent_peers = \"66f26fe655c624986d23af5f1c4f5b462220787f@13.124.45.5:26656,61199f8618163eab3835eb684f382e3185ae9a89@13.124.45.5:16656\"/" $HOME/.crescent/config/config.toml
 
-    cli=$(crescentd tendermint show-node-id --home $HOME/.crescent)
-    echo "Please make sure to inform the partner channel of the ID. With your external IP $cli"
+        echo "Setting State Sync"
+        SNAP_RPC="http://13.124.45.5:16657"
+        LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
+        BLOCK_HEIGHT=$((LATEST_HEIGHT - 2000)); \
+        TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
+
+        sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
+        s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
+        s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
+        s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/.crescent/config/config.toml
+        echo
+
+        cli=$(crescentd tendermint show-node-id --home $HOME/.crescent)
+        echo "Please make sure to inform the partner channel of the ID. With your external IP $cli"
+      fi
 }
 
 error(){
