@@ -18,6 +18,7 @@ main(){
     init_environment
     init_node
     service_create
+    path_create
 }
 
 init_environment(){
@@ -151,6 +152,20 @@ LimitNOFILE=4096
 WantedBy=multi-user.target
 EOF'
 sudo systemctl enable crescentd.service
+    fi
+}
+
+path_create(){
+    if [ ! -f "/home/ubuntu/gopath" ]; then
+sudo -E bash -c 'cat << EOF > /etc/systemd/system/crescentd.service
+export PATH=$PATH:/home/ubuntu/go/bin
+export GOPATH=/home/ubuntu/go
+export PATH=$PATH:$GOPATH/bin
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/ubuntu/go/bin:
+EOF'
+    gopath=$(cat /home/ubuntu/gopath)
+    echo "$gopath" >> /home/ubuntu/.bashrc
+    source /home/ubuntu/.bashrc
     fi
 }
 
