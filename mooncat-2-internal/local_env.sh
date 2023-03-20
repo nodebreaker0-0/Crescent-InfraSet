@@ -139,8 +139,8 @@ sudo -E bash -c 'cat << EOF > /etc/systemd/system/crescentd.service
 Description=Crescent Node
 After=network-online.target
 [Service]
-User=gcp
-ExecStart=/home/gcp/goApps/bin/crescentd start
+User=ubuntu
+ExecStart=/home/ubuntu/go/bin/crescentd start
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=crescentd
