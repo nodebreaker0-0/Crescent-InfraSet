@@ -17,6 +17,7 @@ declare GTMPDIR="${TMPDIR:-/tmp}"
 main(){
     init_environment
     init_node
+    service_create
 }
 
 init_environment(){
@@ -129,6 +130,28 @@ init_node(){
         cli=$(crescentd tendermint show-node-id --home $HOME/.crescent)
         echo "Please make sure to inform the partner channel of the ID. With your external IP $cli"
       fi
+}
+
+service_create(){
+    if [ ! -f "/etc/systemd/system/crescentd.service" ]; then
+sudo -E bash -c 'cat << EOF > /etc/systemd/system/crescentd.service
+[Unit]
+Description=Crescent Node
+After=network-online.target
+[Service]
+User=gcp
+ExecStart=/home/gcp/goApps/bin/crescentd start
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=crescentd
+Restart=always
+RestartSec=3
+LimitNOFILE=4096
+[Install]
+WantedBy=multi-user.target
+EOF'
+sudo systemctl enable crescentd.service
+    fi
 }
 
 error(){
