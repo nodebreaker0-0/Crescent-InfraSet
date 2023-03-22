@@ -157,7 +157,7 @@ sudo systemctl enable crescentd.service
 
 path_create(){
     if [ ! -f "${HOME}/gopath" ]; then
-sudo -E bash -c 'cat << EOF > ${HOME}/gopath
+sudo -E bash -c 'cat << EOF > $HOME/gopath
 export PATH=$PATH:$HOME/go/bin
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
