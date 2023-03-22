@@ -114,7 +114,7 @@ init_node(){
 
         # get peers list
         echo "Getting peer list"
-        sed -i "s/persistent_peers = \".*\"/persistent_peers = \"66f26fe655c624986d23af5f1c4f5b462220787f@13.124.45.5:26656,61199f8618163eab3835eb684f382e3185ae9a89@13.124.45.5:16656\"/" $HOME/.crescent/config/config.toml
+        sed -i "s/persistent_peers = \".*\"/persistent_peers = \"d4003e13829eff3ce4045fbcc35ea096f9fc0b31@3.34.23.181:26656,61199f8618163eab3835eb684f382e3185ae9a89@13.124.45.5:26656\"/" $HOME/.crescent/config/config.toml
 
         echo "Setting State Sync"
         SNAP_RPC="http://13.124.45.5:16657"
@@ -140,8 +140,8 @@ sudo -E bash -c 'cat << EOF > /etc/systemd/system/crescentd.service
 Description=Crescent Node
 After=network-online.target
 [Service]
-User=ubuntu
-ExecStart=/home/ubuntu/go/bin/crescentd start
+User=$USER
+ExecStart=$HOME/go/bin/crescentd start
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=crescentd
@@ -156,16 +156,16 @@ sudo systemctl enable crescentd.service
 }
 
 path_create(){
-    if [ ! -f "/home/ubuntu/gopath" ]; then
-sudo -E bash -c 'cat << EOF > /home/ubuntu/gopath
-export PATH=$PATH:/home/ubuntu/go/bin
-export GOPATH=/home/ubuntu/go
+    if [ ! -f "${HOME}/gopath" ]; then
+sudo -E bash -c 'cat << EOF > ${HOME}/gopath
+export PATH=$PATH:$HOME/go/bin
+export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/ubuntu/go/bin:
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:$HOME/go/bin:
 EOF'
-    gopath=$(cat /home/ubuntu/gopath)
-    echo "$gopath" >> /home/ubuntu/.bashrc
-    source /home/ubuntu/.bashrc
+    gopath=$(cat ${HOME}/gopath)
+    echo "$gopath" >> ${HOME}/.bashrc
+    source ${HOME}/.bashrc
     fi
 }
 
